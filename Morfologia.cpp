@@ -50,6 +50,7 @@ public:
             bitmap = new bool[rangeX*rangeY*rangeZ];
             memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));//kopijujemy
         }
+        return *this;
     }
 
     /**Destruktor*/
