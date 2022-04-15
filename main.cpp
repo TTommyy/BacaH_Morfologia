@@ -8,4 +8,9 @@ int main() {
     b(2, 2, 1) = b(2, 2, 2) = b(2, 2, 3) = b(2, 1, 1) = true;
 
     std::cout << "Oryginalna bitmapa:\n" << b << "\n\n";
+    Inwersja i;
+    Przeksztalcenie* r = &i;
+
+    r->przeksztalc(b);
+    std::cout << "Odwrotna bitmapa:\n" << b << "\n\n";
 }

@@ -10,7 +10,14 @@
 #include <ostream>
 #include <cstring>
 
-
+/*Do reprezentowania wsplrzednych*/
+class Trojka{
+    
+public:
+    unsigned x,y,z;
+    Trojka(){};
+    Trojka(unsigned x, unsigned y, unsigned z): x{x},y{y},z{z}{}
+};
 
 /** Klasa reprezentujaca bitmapy 3D.*/
 class BitmapaExt : public Bitmapa{
@@ -43,12 +50,15 @@ public:
     }
 
     /**Operator przypisania*/
-    BitmapaExt& operator=(const BitmapaExt& bm){
+    BitmapaExt& operator=(const Bitmapa& bm){
         if(this!=&bm){
             delete[] bitmap;
-            rangeX=bm.rangeX ;rangeY=bm.rangeY;rangeZ=bm.rangeZ;//nowy rozmiar
+            rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sy();//nowy rozmiar
             bitmap = new bool[rangeX*rangeY*rangeZ];
-            memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));//kopijujemy
+            for(unsigned x = 0; x < rangeX; x++)
+                for(unsigned y = 0; y<rangeY; y++)
+                    for(unsigned z = 0; z < rangeZ; z++)
+                        (*this)(x,y,z) = bm(x,y,z);
         }
         return *this;
     }
@@ -79,8 +89,22 @@ public:
         return bitmap[x*(rangeY*rangeZ)+(y*rangeZ)+z];
     }
 
-
 };
+
+/*Znajduje sasiadow bitu, ich liczbe przkazuje w parametrze*/
+    Trojka* otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int liczbaSasaidow){
+        liczbaSasaidow = 0;
+        Trojka otoczenie [6];
+        if(x>0) otoczenie[liczbaSasaidow++] = Trojka(x-1,y,z);
+        if(x+1<bm.sx()) otoczenie[liczbaSasaidow++] = Trojka(x+1,y,z);
+        if(y>0) otoczenie[liczbaSasaidow++] = Trojka(x,y-1,z);
+        if(y+1<bm.sy()) otoczenie[liczbaSasaidow++] = Trojka(x,y+1,z);
+        if(z>0) otoczenie[liczbaSasaidow++] = Trojka(x,y,z-1);
+        if(z+1<bm.sz()) otoczenie[liczbaSasaidow++] = Trojka(x,y,z+1);
+        return otoczenie;
+
+    } 
+
 
 /**Operator wyjscia dla klasy  BitMapa*/
 std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
@@ -105,10 +129,21 @@ std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
     return ostream;
 }
 
+/*Kopiowanie bitampy*/
+BitmapaExt copy(const Bitmapa& bm){
+    BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());
+    copy = bm;
+    return copy;
+}
+
+
 /*-----------------------Potomkowie klasy Przeksztalecnie-----------------*/
 
-/*Zamiana pikseli czarnych na biale i viceversa*/
+/**Zamiana pikseli czarnych na biale i viceversa*/
 class Inwersja:public Przeksztalcenie{
+public:
+    Inwersja(){};
+
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
         for(unsigned long long i = 0; i < (bm.sx()*bm.sy()*bm.sx()); ++i ) // dla kazdego piksela
@@ -117,6 +152,28 @@ class Inwersja:public Przeksztalcenie{
 
     //dekstruktor
     ~Inwersja(){}
+};
+
+/**Przez piksel brzegowy obrazu rozumiemy piksel czarny, którego jednym z sąsiadów jest piksel biały. Operacja erozji polega na tym, że najpierw 
+ * lokalizowane są wszystkie piksele brzegowe w danym obrazie, a następnie ich kolor jest ustawiany na biały.*/
+class Erozja:public Przeksztalcenie{
+public:
+    Erozja(){};
+
+    //funkcja przeksztalcajaca
+    void przeksztalc(Bitmapa& bm) override{
+       /*Znajdumemy punkty podantne na erozje*/
+        Trojka* doErozji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
+        unsigned long long ilosDoErozji = 0;
+        Trojka* sasiedzi;
+        int liczbaSasiadow;
+        for(unsigned x=0; x<bm.sx() ;x++)//dla kazdego punktu
+            for(unsigned y=0; y<bm.sy(); y++)
+                for(unsigned z=0; z<bm.sz(); z++){
+                    sasiedzi = otoczenie(bm,x,y,z,liczbaSasiadow);//znajedumy sasiadow
+
+                }
+    }
 };
 
 
