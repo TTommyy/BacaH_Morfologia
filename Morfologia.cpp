@@ -3,7 +3,13 @@
 // Zadanie H
 // Kurs "Programowanie 2"
 
+#ifndef __MORFOLOGIA_CPP__
+#define __MORFOLOGIA_CPP__
+
 #include "Morfologia.h"
+#include <ostream>
+
+
 
 /** Klasa reprezentujaca bitmapy 3D.*/
 class BitmapaExt : public Bitmapa{
@@ -25,7 +31,7 @@ public:
     * */
     BitmapaExt(unsigned x, unsigned y, unsigned z): rangeX{x},rangeY{y},rangeZ{z}{
         bitmap = new bool[x*y*z]; // Tworzy tablice bitow o rozmiarze x*y*z.
-        for(auto i = 0; i<x*y*z; ++i )
+        for(unsigned i = 0; i<x*y*z; ++i )
             bitmap[i] = false;//Ustawiamy kolor kazdego na bialy
     }
 
@@ -57,3 +63,24 @@ public:
 
 
 };
+
+/**Operator wyjscia dla klasy  BitMapa*/
+std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
+    ostream << "{\n";
+    for( unsigned rX = 0; rX < bitmapa.sx(); rX++ ){// wypisujemy dwuwymiarowe bloki
+        ostream << "{\n";
+        for( unsigned rY = 0; rY < bitmapa.sy(); rY++ ){//wypsujemy wiersze w blokach
+            ostream << "{";
+            for(unsigned rZ = 0; rZ < bitmapa.sz(); rZ++ ){
+                ostream << bitmapa(rX,rY,rZ);
+                if(rZ+1<bitmapa.sz()) ostream << ",";
+            }
+            ostream << "}\n";
+        }
+        ostream << "}\n";
+    }
+    ostream << "}";
+    return ostream;
+}
+
+#endif
