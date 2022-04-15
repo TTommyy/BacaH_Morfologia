@@ -105,4 +105,20 @@ std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
     return ostream;
 }
 
+/*-----------------------Potomkowie klasy Przeksztalecnie-----------------*/
+
+/*Zamiana pikseli czarnych na biale i viceversa*/
+class Inwersja:public Przeksztalcenie{
+    //funkcja przeksztalcajaca
+    void przeksztalc(Bitmapa& bm) override{
+        for(unsigned long long i = 0; i < (bm.sx()*bm.sy()*bm.sx()); ++i ) // dla kazdego piksela
+            bm(0,0,i) = !bm(0,0,i);// zamina koloru.
+    }
+
+    //dekstruktor
+    ~Inwersja(){}
+};
+
+
+
 #endif
