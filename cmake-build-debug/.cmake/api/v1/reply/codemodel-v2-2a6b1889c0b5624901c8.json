@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/cmake-build-debug",
-		"source" : "/home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia"
+		"build" : "/home/tomek/Pulpit/Studia/Programowanie2/BacaH_Morfologia/cmake-build-debug",
+		"source" : "/home/tomek/Pulpit/Studia/Programowanie2/BacaH_Morfologia"
 	},
 	"version" : 
 	{

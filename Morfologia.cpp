@@ -10,28 +10,7 @@
 #include <ostream>
 #include <cstring>
 
-/**Operator wyjscia dla klasy  BitMapa*/
-std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
-    ostream << "{\n";
-    for( unsigned rX = 0; rX < bitmapa.sx(); rX++ ){// wypisujemy dwuwymiarowe bloki
-        ostream << "{\n";
-        for( unsigned rY = 0; rY < bitmapa.sy(); rY++ ){//wypsujemy wiersze w blokach
-            ostream << "{";
-            for(unsigned rZ = 0; rZ < bitmapa.sz(); rZ++ ){
-                ostream << bitmapa(rX,rY,rZ);
-                if(rZ+1<bitmapa.sz()) ostream << ",";
-            }
-            ostream << "}";
-            if(rY+1<bitmapa.sy()) ostream << ",";
-            ostream <<"\n";
-        }
-        ostream << "}";
-        if(rX+1<bitmapa.sx()) ostream << ",";
-        ostream <<"\n";
-    }
-    ostream << "}";
-    return ostream;
-}
+
 
 /** Klasa reprezentujaca bitmapy 3D.*/
 class BitmapaExt : public Bitmapa{
@@ -103,6 +82,27 @@ public:
 
 };
 
-
+/**Operator wyjscia dla klasy  BitMapa*/
+std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
+    ostream << "{\n";
+    for( unsigned rX = 0; rX < bitmapa.sx(); rX++ ){// wypisujemy dwuwymiarowe bloki
+        ostream << " {\n";
+        for( unsigned rY = 0; rY < bitmapa.sy(); rY++ ){//wypsujemy wiersze w blokach
+            ostream << "  {";
+            for(unsigned rZ = 0; rZ < bitmapa.sz(); rZ++ ){
+                ostream << bitmapa(rX,rY,rZ);
+                if(rZ+1<bitmapa.sz()) ostream << ",";
+            }
+            ostream << "}";
+            if(rY+1<bitmapa.sy()) ostream << ",";
+            ostream <<"\n";
+        }
+        ostream << " }";
+        if(rX+1<bitmapa.sx()) ostream << ",";
+        ostream <<"\n";
+    }
+    ostream << "}";
+    return ostream;
+}
 
 #endif

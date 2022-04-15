@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/BacaH_Morfologia.dir/main.cpp.o CMakeFiles/BacaH_Morfologia.dir/Morfologia.cpp.o -o BacaH_Morfologia 
