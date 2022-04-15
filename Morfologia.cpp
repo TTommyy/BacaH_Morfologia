@@ -8,6 +8,7 @@
 
 #include "Morfologia.h"
 #include <ostream>
+#include <cstring>
 
 
 
@@ -33,6 +34,22 @@ public:
         bitmap = new bool[x*y*z]; // Tworzy tablice bitow o rozmiarze x*y*z.
         for(unsigned i = 0; i<x*y*z; ++i )
             bitmap[i] = false;//Ustawiamy kolor kazdego na bialy
+    }
+
+    /**Konstruktor kopujacy*/
+    BitmapaExt( BitmapaExt& bm):rangeX{bm.rangeX} ,rangeY{bm.rangeY},rangeZ{bm.rangeZ}{
+        bitmap = new bool[rangeX*rangeY*rangeZ];
+        memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
+    }
+
+    /**Operator przypisania*/
+    BitmapaExt& operator=(const BitmapaExt& bm){
+        if(this!=&bm){
+            delete[] bitmap;
+            rangeX=bm.rangeX ;rangeY=bm.rangeY;rangeZ=bm.rangeZ;//nowy rozmiar
+            bitmap = new bool[rangeX*rangeY*rangeZ];
+            memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));//kopijujemy
+        }
     }
 
     /**Destruktor*/

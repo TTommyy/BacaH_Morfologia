@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: BacaH_Morgologia
+# Project: BacaH_Morfologia
 # Configurations: Debug
 # =============================================================================
 
@@ -39,66 +39,66 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/cmake-build-debug/
-
-#############################################
-# Utility command for edit_cache
-
-build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/cmake-build-debug && /home/tomek/Pobrane/clion-2021.3.4/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-  DESC = No interactive CMake dialog available...
-  restat = 1
-
-build edit_cache: phony CMakeFiles/edit_cache.util
-
+cmake_ninja_workdir = /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/cmake-build-debug/
 
 #############################################
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/cmake-build-debug && /home/tomek/Pobrane/clion-2021.3.4/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia -B/home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/cmake-build-debug
+  COMMAND = cd /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/cmake-build-debug && /home/tomek/Pobrane/clion-2021.3.4/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia -B/home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/cmake-build-debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/cmake-build-debug && /home/tomek/Pobrane/clion-2021.3.4/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
 # =============================================================================
-# Object build statements for EXECUTABLE target BacaH_Morgologia
+# Object build statements for EXECUTABLE target BacaH_Morfologia
 
 
 #############################################
-# Order-only phony target for BacaH_Morgologia
+# Order-only phony target for BacaH_Morfologia
 
-build cmake_object_order_depends_target_BacaH_Morgologia: phony || CMakeFiles/BacaH_Morgologia.dir
+build cmake_object_order_depends_target_BacaH_Morfologia: phony || CMakeFiles/BacaH_Morfologia.dir
 
-build CMakeFiles/BacaH_Morgologia.dir/main.cpp.o: CXX_COMPILER__BacaH_Morgologia_Debug /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/main.cpp || cmake_object_order_depends_target_BacaH_Morgologia
-  DEP_FILE = CMakeFiles/BacaH_Morgologia.dir/main.cpp.o.d
+build CMakeFiles/BacaH_Morfologia.dir/main.cpp.o: CXX_COMPILER__BacaH_Morfologia_Debug /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/main.cpp || cmake_object_order_depends_target_BacaH_Morfologia
+  DEP_FILE = CMakeFiles/BacaH_Morfologia.dir/main.cpp.o.d
   FLAGS = -g -std=gnu++11
-  OBJECT_DIR = CMakeFiles/BacaH_Morgologia.dir
-  OBJECT_FILE_DIR = CMakeFiles/BacaH_Morgologia.dir
+  OBJECT_DIR = CMakeFiles/BacaH_Morfologia.dir
+  OBJECT_FILE_DIR = CMakeFiles/BacaH_Morfologia.dir
 
-build CMakeFiles/BacaH_Morgologia.dir/Morfologia.cpp.o: CXX_COMPILER__BacaH_Morgologia_Debug /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/Morfologia.cpp || cmake_object_order_depends_target_BacaH_Morgologia
-  DEP_FILE = CMakeFiles/BacaH_Morgologia.dir/Morfologia.cpp.o.d
+build CMakeFiles/BacaH_Morfologia.dir/Morfologia.cpp.o: CXX_COMPILER__BacaH_Morfologia_Debug /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/Morfologia.cpp || cmake_object_order_depends_target_BacaH_Morfologia
+  DEP_FILE = CMakeFiles/BacaH_Morfologia.dir/Morfologia.cpp.o.d
   FLAGS = -g -std=gnu++11
-  OBJECT_DIR = CMakeFiles/BacaH_Morgologia.dir
-  OBJECT_FILE_DIR = CMakeFiles/BacaH_Morgologia.dir
+  OBJECT_DIR = CMakeFiles/BacaH_Morfologia.dir
+  OBJECT_FILE_DIR = CMakeFiles/BacaH_Morfologia.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target BacaH_Morgologia
+# Link build statements for EXECUTABLE target BacaH_Morfologia
 
 
 #############################################
-# Link the executable BacaH_Morgologia
+# Link the executable BacaH_Morfologia
 
-build BacaH_Morgologia: CXX_EXECUTABLE_LINKER__BacaH_Morgologia_Debug CMakeFiles/BacaH_Morgologia.dir/main.cpp.o CMakeFiles/BacaH_Morgologia.dir/Morfologia.cpp.o
+build BacaH_Morfologia: CXX_EXECUTABLE_LINKER__BacaH_Morfologia_Debug CMakeFiles/BacaH_Morfologia.dir/main.cpp.o CMakeFiles/BacaH_Morfologia.dir/Morfologia.cpp.o
   FLAGS = -g
-  OBJECT_DIR = CMakeFiles/BacaH_Morgologia.dir
+  OBJECT_DIR = CMakeFiles/BacaH_Morfologia.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = BacaH_Morgologia
-  TARGET_PDB = BacaH_Morgologia.dbg
+  TARGET_FILE = BacaH_Morfologia
+  TARGET_PDB = BacaH_Morfologia.dbg
 
 # =============================================================================
 # Target aliases.
@@ -109,9 +109,9 @@ build BacaH_Morgologia: CXX_EXECUTABLE_LINKER__BacaH_Morgologia_Debug CMakeFiles
 # =============================================================================
 
 #############################################
-# Folder: /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morgologia/cmake-build-debug
+# Folder: /home/tomek/Pulpit/Studia/Programowanie2/BacaH-Morfologia/cmake-build-debug
 
-build all: phony BacaH_Morgologia
+build all: phony BacaH_Morfologia
 
 # =============================================================================
 # Built-in targets
