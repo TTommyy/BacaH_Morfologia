@@ -7,7 +7,7 @@
 #define __MORFOLOGIA_CPP__
 
 #include "Morfologia.h"
-#include <ostream>
+#include <iostream>
 #include <cstring>
 
 /*Do reprezentowania wsplrzednych*/
@@ -17,6 +17,7 @@ public:
     unsigned x,y,z;
     Trojka(){};
     Trojka(unsigned x, unsigned y, unsigned z): x{x},y{y},z{z}{}
+    //Trojka operator =(Trojka t){ x = t.x; y = t.y; z = t.z; return *this; }
 };
 
 /** Klasa reprezentujaca bitmapy 3D.*/
@@ -92,16 +93,14 @@ public:
 };
 
 /*Znajduje sasiadow bitu, ich liczbe przkazuje w parametrze*/
-    Trojka* otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int liczbaSasaidow){
+    void otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int liczbaSasaidow,Trojka* otoczenie){
         liczbaSasaidow = 0;
-        Trojka otoczenie [6];
         if(x>0) otoczenie[liczbaSasaidow++] = Trojka(x-1,y,z);
         if(x+1<bm.sx()) otoczenie[liczbaSasaidow++] = Trojka(x+1,y,z);
         if(y>0) otoczenie[liczbaSasaidow++] = Trojka(x,y-1,z);
         if(y+1<bm.sy()) otoczenie[liczbaSasaidow++] = Trojka(x,y+1,z);
         if(z>0) otoczenie[liczbaSasaidow++] = Trojka(x,y,z-1);
         if(z+1<bm.sz()) otoczenie[liczbaSasaidow++] = Trojka(x,y,z+1);
-        return otoczenie;
 
     } 
 
@@ -146,7 +145,7 @@ public:
 
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
-        for(unsigned long long i = 0; i < (bm.sx()*bm.sy()*bm.sx()); ++i ) // dla kazdego piksela
+        for(unsigned long long i = 0; i < (bm.sx()*bm.sy()*bm.sx()); i++ ) // dla kazdego piksela
             bm(0,0,i) = !bm(0,0,i);// zamina koloru.
     }
 
@@ -165,14 +164,36 @@ public:
        /*Znajdumemy punkty podantne na erozje*/
         Trojka* doErozji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
         unsigned long long ilosDoErozji = 0;
-        Trojka* sasiedzi;
+        Trojka sasiedzi[6];
         int liczbaSasiadow;
-        for(unsigned x=0; x<bm.sx() ;x++)//dla kazdego punktu
-            for(unsigned y=0; y<bm.sy(); y++)
+        int sX,sY,sZ;
+        for(unsigned x=0; x<bm.sx() ;x++){//dla kazdego punktu
+            for(unsigned y=0; y<bm.sy(); y++){
                 for(unsigned z=0; z<bm.sz(); z++){
-                    sasiedzi = otoczenie(bm,x,y,z,liczbaSasiadow);//znajedumy sasiadow
-
+                    //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
+                    if(bm(x,y,z)==1){//jesli czarny
+                        otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
+                        for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
+                            sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
+                            //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
+                            //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
+                            if(bm(sX,sY,sZ)==0){//jesli jakis sasiad bialy
+                                doErozji[ilosDoErozji++] = Trojka(x,y,z);//to do erozji
+                                break;//idzemy dalej
+                            }
+                        }
+                    }
                 }
+            }
+        }
+        for(unsigned long long i =0; i<ilosDoErozji; i++){//dla kazdego punktu do erozji
+
+            sX = doErozji[i].x; sY = doErozji[i].y; sZ = doErozji[i].z;
+            //std::cout<< "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
+            bm(sX,sY,sZ) = false;//zmien kolor na bialy
+        }
+        delete[] doErozji;//zwalniamy pamiec
+
     }
 };
 
