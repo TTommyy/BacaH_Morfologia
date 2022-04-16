@@ -44,10 +44,18 @@ public:
             bitmap[i] = false;//Ustawiamy kolor kazdego na bialy
     }
 
-    /**Konstruktor kopujacy*/
-    BitmapaExt( BitmapaExt& bm):rangeX{bm.rangeX} ,rangeY{bm.rangeY},rangeZ{bm.rangeZ}{
+    /**Konstruktory kopujacy*/
+    BitmapaExt(const BitmapaExt& bm):rangeX{bm.rangeX} ,rangeY{bm.rangeY},rangeZ{bm.rangeZ}{
         bitmap = new bool[rangeX*rangeY*rangeZ];
         memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
+    }
+    BitmapaExt(const Bitmapa& bm){
+        rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sy();//nowy rozmiar
+        bitmap = new bool[rangeX*rangeY*rangeZ];
+        for(unsigned x = 0; x < rangeX; x++)
+            for(unsigned y = 0; y<rangeY; y++)
+                for(unsigned z = 0; z < rangeZ; z++)
+                    (*this)(x,y,z) = bm(x,y,z);
     }
 
     /**Operatory przypisania*/
@@ -288,6 +296,51 @@ public:
     }
 };
 
+/**dla każdego piksela p obrazu sprawdzamy liczbę 
+ * sąsiadujących z nim pikseli białych i czarnych. 
+ * Jeśli ma on więcej niż trzech sąsiadów w kolorze k, to nowym kolorem 
+ * piksela p jest kolor k. W przeciwnym razie kolor piksela nie zmienia się.
+ *  Sąsiadów rozważamy w oryginalnym obrazie, nie w obrazie częściowo uśrednionym!
+ * */
+class Usrednianie:public Przeksztalcenie{
+public:
+    Usrednianie(){};
+
+    /*Przkesztalcenie*/
+    void przeksztalc(Bitmapa&bm) override{
+        BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());//kopijujemy bitampe
+        Trojka sasiedzi[6];//przyda sie
+        int iloscSasiadow,sX,sY,sZ;//^^^
+        int bialy = 0,czarny = 0;
+        unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
+        for(unsigned x = 0; x<rX; x++){//dla kazego punktu
+            for(unsigned y=0; y<rY; y++){
+                for(unsigned z=0; z<rZ; z++){
+                    otoczenie(bm,x,y,z,iloscSasiadow,sasiedzi);//znajdz sasiadow
+                    bialy = czarny = 0;//wyzeruj licznki
+                    for(int i=0;i <iloscSasiadow; i++){//dla kazdego sasiada
+                        sX = sasiedzi[i].x; sY = sasiedzi[i].y; sZ = sasiedzi[i].z;
+                        //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
+                        bm(sX,sY,sZ)? czarny++:bialy++;//podlicz
+                    }
+                    if(bialy>3) copy(x,y,z) = 0;
+                    else if(czarny>3) copy(x,y,z) = 1;//ustaw odpowiednio
+                    else copy(x,y,z) = bm(x,y,z);
+                }
+            }
+        }
+
+        /*Teraz przespszemy kopie do bitampy*/
+        //bm = copy;
+        for(unsigned x = 0; x<rX; x++){//dla kazego punktu
+            for(unsigned y=0; y<rY; y++){
+                for(unsigned z=0; z<rZ; z++){
+                    bm(x,y,z) = copy(x,y,z);
+                }
+            }
+        }
+    }
+};
 
 
 #endif
