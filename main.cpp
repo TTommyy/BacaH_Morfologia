@@ -11,7 +11,7 @@ int main() {
     b(0,0,0)=b(0,0,1) = b(0,1,1) = b(0,1,0) = 1;
 
     std::cout << "Oryginalna bitmapa:\n" << b << "\n\n";
-    Erozja i;
+    Dylatacja i;
     Przeksztalcenie* r = &i;
 
     r->przeksztalc(b);
