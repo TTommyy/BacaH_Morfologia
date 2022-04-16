@@ -230,6 +230,7 @@ public:
     }
 };
 
+/**Operacja odwrotna do erozji*/
 class Dylatacja:public Przeksztalcenie{
 public:
     Dylatacja(){};
@@ -272,8 +273,20 @@ public:
     }
 };
 
+/**Ustawia wszytko na bialy*/
+class Zerowanie:public Przeksztalcenie{
+public:
+    Zerowanie(){};
 
-/**Operacja odwrotna do erozji*/
+    /*Przeksztalcenie*/
+    void przeksztalc(Bitmapa& bm) override{
+        unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
+        for(unsigned x = 0; x<rX; x++)
+            for(unsigned y = 0; y<rY; y++)
+                for(unsigned z = 0; z<rZ; z++)  
+                    bm(x,y,z) = 0;
+    }
+};
 
 
 
