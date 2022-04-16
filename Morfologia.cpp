@@ -9,6 +9,7 @@
 #include "Morfologia.h"
 #include <iostream>
 #include <cstring>
+#include <vector>
 
 /*Do reprezentowania wsplrzednych*/
 class Trojka{
@@ -339,6 +340,24 @@ public:
                 }
             }
         }
+    }
+};
+
+/*Klasa skladajaca przeksztalcenie*/
+class ZlozeniePrzeksztalcen:public Przeksztalcenie{
+
+std::vector<Przeksztalcenie*> tabelaPrzeksztalcen;
+
+public:
+    ZlozeniePrzeksztalcen(){}
+    
+    void dodajPrzeksztalcenie(Przeksztalcenie* p){
+        tabelaPrzeksztalcen.push_back(p);
+    }
+
+    void przeksztalc(Bitmapa& bm)override{
+        for(auto p:tabelaPrzeksztalcen)
+            p->przeksztalc(bm);
     }
 };
 
