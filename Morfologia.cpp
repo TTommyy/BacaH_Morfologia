@@ -93,14 +93,36 @@ public:
 };
 
 /*Znajduje sasiadow bitu, ich liczbe przkazuje w parametrze*/
-    void otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int liczbaSasaidow,Trojka* otoczenie){
+    void otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int& liczbaSasaidow,Trojka* otoczenie){
         liczbaSasaidow = 0;
-        if(x>0) otoczenie[liczbaSasaidow++] = Trojka(x-1,y,z);
-        if(x+1<bm.sx()) otoczenie[liczbaSasaidow++] = Trojka(x+1,y,z);
-        if(y>0) otoczenie[liczbaSasaidow++] = Trojka(x,y-1,z);
-        if(y+1<bm.sy()) otoczenie[liczbaSasaidow++] = Trojka(x,y+1,z);
-        if(z>0) otoczenie[liczbaSasaidow++] = Trojka(x,y,z-1);
-        if(z+1<bm.sz()) otoczenie[liczbaSasaidow++] = Trojka(x,y,z+1);
+        //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
+        if(x>0){
+            otoczenie[liczbaSasaidow++] = Trojka(x-1,y,z); 
+            //std::cout<< "SasiadAdd: " << "x: " << x-1 << " y: " << y << " z: " << z << "\n";
+        }
+            
+        if(x+1<bm.sx()) { 
+            otoczenie[liczbaSasaidow++] = Trojka(x+1,y,z); 
+            //std::cout<< "SasiadAdd: " << "x: " << x+1 << " y: " << y << " z: " << z << "\n";
+        }
+        if(y>0){
+            otoczenie[liczbaSasaidow++] = Trojka(x,y-1,z);
+            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y-1 << " z: " << z << "\n";
+        } 
+        if(y+1<bm.sy()) {
+            otoczenie[liczbaSasaidow++] = Trojka(x,y+1,z);
+            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y+1 << " z: " << z << "\n";
+        } 
+        
+        if(z>0) {
+            otoczenie[liczbaSasaidow++] = Trojka(x,y,z-1);
+            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y << " z: " << z-1 << "\n";
+        }
+
+        if(z+1<bm.sz()){
+            otoczenie[liczbaSasaidow++] = Trojka(x,y,z+1);
+            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y << " z: " << z+1 << "\n";
+        }
 
     } 
 
@@ -165,7 +187,7 @@ public:
         Trojka* doErozji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
         unsigned long long ilosDoErozji = 0;
         Trojka sasiedzi[6];
-        int liczbaSasiadow;
+        int liczbaSasiadow ;
         int sX,sY,sZ;
         for(unsigned x=0; x<bm.sx() ;x++){//dla kazdego punktu
             for(unsigned y=0; y<bm.sy(); y++){
@@ -189,7 +211,7 @@ public:
         for(unsigned long long i =0; i<ilosDoErozji; i++){//dla kazdego punktu do erozji
 
             sX = doErozji[i].x; sY = doErozji[i].y; sZ = doErozji[i].z;
-            //std::cout<< "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
+            //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
             bm(sX,sY,sZ) = false;//zmien kolor na bialy
         }
         delete[] doErozji;//zwalniamy pamiec
