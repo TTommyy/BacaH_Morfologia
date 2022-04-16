@@ -50,7 +50,7 @@ public:
         memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
     }
 
-    /**Operator przypisania*/
+    /**Operatory przypisania*/
     BitmapaExt& operator=(const Bitmapa& bm){
         if(this!=&bm){
             delete[] bitmap;
@@ -63,6 +63,17 @@ public:
         }
         return *this;
     }
+
+    BitmapaExt& operator=(const BitmapaExt& bm){
+    if(this!=&bm){
+            delete[] bitmap;
+            rangeX=bm.rangeX ;rangeY=bm.rangeY;rangeZ=bm.rangeZ;//nowy rozmiar
+            bitmap = new bool[rangeX*rangeY*rangeZ];
+            memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));//kopijujemy
+        }
+        return *this;
+    }
+    
 
     /**Destruktor*/
     ~BitmapaExt() override{ delete[] bitmap; }
