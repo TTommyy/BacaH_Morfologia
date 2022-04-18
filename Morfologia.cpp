@@ -236,8 +236,14 @@ public:
 
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
-        for(unsigned long long i = 0; i < (bm.sx()*bm.sy()*bm.sx()); i++ ) // dla kazdego piksela
-            bm(0,0,i) = !bm(0,0,i);// zamina koloru.
+        unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
+        for(unsigned x = 0; x<rX; x++){//dla kazego punktu
+            for(unsigned y=0; y<rY; y++){
+                for(unsigned z=0; z<rZ; z++){
+                    bm(x,y,z) = !bm(x,y,z);//zamiana koloru
+                }
+            }
+        }
     }
 
     //dekstruktor
@@ -342,7 +348,7 @@ public:
         for(unsigned x = 0; x<rX; x++)
             for(unsigned y = 0; y<rY; y++)
                 for(unsigned z = 0; z<rZ; z++)  
-                    bm(x,y,z) = 0;
+                    bm(x,y,z) = 0;//zerujemy
     }
 };
 
@@ -408,7 +414,7 @@ public:
         for(auto p:tabelaPrzeksztalcen)
             p->przeksztalc(bm);
         
-        //tabelaPrzeksztalcen.clear();
+        tabelaPrzeksztalcen.clear();
     }
 };
 

@@ -6,10 +6,11 @@ int main(){
     b(0,0,0) = b(0,1,1)=b(0,2,2) = 1;
     b(1,0,2) = b(1,1,1) = b(1,2,0) = 1;
 
-    Zerowanie ze;
-
+    Dylatacja d;
+    Inwersja i;
     ZlozeniePrzeksztalcen z;
-    z.dodajPrzeksztalcenie(&ze);
+    z.dodajPrzeksztalcenie(&d);
+    z.dodajPrzeksztalcenie(&i);
     std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
     /*Powinno byc:
     {
@@ -27,7 +28,22 @@ int main(){
     */
     z.przeksztalc(b);
     std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
-    /*Pwonno byc
+   
+   /*
+    Po dylatacji:
+    {
+        {
+            {1,1,1},
+            {1,1,1},
+            {1,1,1}
+        },
+        {
+            {1,1,1},
+            {1,1,1},
+            {1,1,1}
+        }
+    }
+    Po inwersji:
     {
         {
             {0,0,0},
@@ -39,5 +55,6 @@ int main(){
             {0,0,0},
             {0,0,0}
         }
+    }
     */
-}
+    

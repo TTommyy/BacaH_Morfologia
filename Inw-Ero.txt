@@ -6,10 +6,12 @@ int main(){
     b(0,0,0) = b(0,1,1)=b(0,2,2) = 1;
     b(1,0,2) = b(1,1,1) = b(1,2,0) = 1;
 
-    Zerowanie ze;
+    Inwersja i;
+    Erozja e;
 
     ZlozeniePrzeksztalcen z;
-    z.dodajPrzeksztalcenie(&ze);
+    z.dodajPrzeksztalcenie(&i);
+    z.dodajPrzeksztalcenie(&e);
     std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
     /*Powinno byc:
     {
@@ -27,7 +29,24 @@ int main(){
     */
     z.przeksztalc(b);
     std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
-    /*Pwonno byc
+    /*Najpierw inwersja a wiec:
+    {
+        {
+            {0,1,1},
+            {1,0,1},
+            {1,1,0}
+        },
+        {
+            {1,1,0},
+            {1,0,1},
+            {0,1,1}
+        }
+    }
+    */
+   //z.dodajPrzeksztalcenie(&e);
+   //z.przeksztalc(b);
+   /*
+    Potem erozja wiec:
     {
         {
             {0,0,0},
@@ -39,5 +58,6 @@ int main(){
             {0,0,0},
             {0,0,0}
         }
+    }
     */
-}
+    //std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
