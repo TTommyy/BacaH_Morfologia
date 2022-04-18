@@ -259,7 +259,7 @@ public:
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
        /*Znajdumemy punkty podantne na erozje*/
-        Trojka* doDylatacji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
+        Trojka* doErozji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
         unsigned long long ilosDoErozji = 0;
         Trojka sasiedzi[6];
         int liczbaSasiadow ;
@@ -275,7 +275,7 @@ public:
                             //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
                             //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
                             if(bm(sX,sY,sZ)==0){//jesli jakis sasiad bialy
-                                doDylatacji[ilosDoErozji++] = Trojka(x,y,z);//to do erozji
+                                doErozji[ilosDoErozji++] = Trojka(x,y,z);//to do erozji
                                 break;//idzemy dalej
                             }
                         }
@@ -285,11 +285,11 @@ public:
         }
         for(unsigned long long i =0; i<ilosDoErozji; i++){//dla kazdego punktu do erozji
 
-            sX = doDylatacji[i].x; sY = doDylatacji[i].y; sZ = doDylatacji[i].z;
+            sX = doErozji[i].x; sY = doErozji[i].y; sZ = doErozji[i].z;
             //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
             bm(sX,sY,sZ) = false;//zmien kolor na bialy
         }
-        delete[] doDylatacji;//zwalniamy pamiec
+        delete[] doErozji;//zwalniamy pamiec
 
     }
 };
@@ -330,7 +330,7 @@ public:
 
             sX = doDylatacji[i].x; sY = doDylatacji[i].y; sZ = doDylatacji[i].z;
             //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-            bm(sX,sY,sZ) = true;//zmien kolor na czatny
+            bm(sX,sY,sZ) = true;//zmien kolor na czarny
         }
         delete[] doDylatacji;//zwalniamy pamiec
 
@@ -404,7 +404,7 @@ class ZlozeniePrzeksztalcen:public Przeksztalcenie{
 std::vector<Przeksztalcenie*> tabelaPrzeksztalcen;
 
 public:
-    ZlozeniePrzeksztalcen(){}
+    ZlozeniePrzeksztalcen(){ tabelaPrzeksztalcen.clear(); }
     
     void dodajPrzeksztalcenie(Przeksztalcenie* p){
         tabelaPrzeksztalcen.push_back(p);
@@ -414,7 +414,7 @@ public:
         for(auto p:tabelaPrzeksztalcen)
             p->przeksztalc(bm);
         
-        tabelaPrzeksztalcen.clear();
+        //tabelaPrzeksztalcen.clear();
     }
 };
 

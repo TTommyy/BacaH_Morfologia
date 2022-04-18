@@ -7,9 +7,12 @@ int main(){
     b(1,0,2) = b(1,1,1) = b(1,2,0) = 1;
 
     Zerowanie ze;
-
+    Inwersja i;
     ZlozeniePrzeksztalcen z;
     z.dodajPrzeksztalcenie(&ze);
+    z.dodajPrzeksztalcenie(&i);
+    z.dodajPrzeksztalcenie(&ze);
+    z.dodajPrzeksztalcenie(&i);
     std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
     /*Powinno byc:
     {
