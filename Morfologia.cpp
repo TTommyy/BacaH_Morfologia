@@ -11,6 +11,55 @@
 #include <cstring>
 #include <vector>
 
+/*Test jawny zwraca:
+Oryginalna bitmapa:
+{
+ {
+  {0,0,0,0,0},
+  {1,0,1,0,0},
+  {0,0,1,1,0},
+  {0,0,0,0,0}
+ },
+ {
+  {0,0,0,0,0},
+  {0,1,0,0,0},
+  {0,1,1,1,0},
+  {0,0,0,0,0}
+ },
+ {
+  {0,0,0,0,0},
+  {0,1,1,0,0},
+  {0,1,1,1,0},
+  {0,0,0,0,0}
+ }
+}
+
+Przeksztalcona bitmapa:
+{
+ {
+  {0,0,0,0,0},
+  {0,0,1,1,0},
+  {0,1,1,1,1},
+  {0,0,1,1,0}
+ },
+ {
+  {0,0,1,0,0},
+  {0,1,1,1,0},
+  {1,1,1,1,1},
+  {0,1,1,1,0}
+ },
+ {
+  {0,1,1,0,0},
+  {1,1,1,1,0},
+  {1,1,1,1,1},
+  {0,1,1,1,0}
+ }
+}
+Co jest zgodne z wyjsciem oczekiwanym.
+*/
+
+
+
 /*Do reprezentowania wsplrzednych*/
 class Trojka{
     
@@ -358,6 +407,8 @@ public:
     void przeksztalc(Bitmapa& bm)override{
         for(auto p:tabelaPrzeksztalcen)
             p->przeksztalc(bm);
+        
+        //tabelaPrzeksztalcen.clear();
     }
 };
 
