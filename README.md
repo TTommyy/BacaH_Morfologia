@@ -1,3 +1,4 @@
 # BacaH_Morfologia
-Zadanie z Programowanie2
-Koncentruje sie wookol operacji na bitmapach.
+Projekt z kursu "Programowanie2".
+Plik Morfologia.cpp dostarcza pochodne klas zdefinoiwanych w pliku Morfologia.h
+Zadaniem klas pochodnych jest wykonywanie okreslonych operacji morfologicznych na bitmapach.
