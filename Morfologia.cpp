@@ -192,7 +192,6 @@ public:
             otoczenie[liczbaSasaidow++] = Trojka(x,y,z+1);
             //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y << " z: " << z+1 << "\n";
         }
-
     } 
 
 
@@ -203,7 +202,7 @@ std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
         ostream << " {\n";
         for( unsigned rY = 0; rY < bitmapa.sy(); rY++ ){//wypsujemy wiersze w blokach
             ostream << "  {";
-            for(unsigned rZ = 0; rZ < bitmapa.sz(); rZ++ ){
+            for(unsigned rZ = 0; rZ < bitmapa.sz(); rZ++ ){//wypisujemy wiersze
                 ostream << bitmapa(rX,rY,rZ);
                 if(rZ+1<bitmapa.sz()) ostream << ",";
             }
@@ -404,7 +403,7 @@ class ZlozeniePrzeksztalcen:public Przeksztalcenie{
 std::vector<Przeksztalcenie*> tabelaPrzeksztalcen;
 
 public:
-    ZlozeniePrzeksztalcen(){ tabelaPrzeksztalcen.clear(); }
+    ZlozeniePrzeksztalcen(){}
     
     void dodajPrzeksztalcenie(Przeksztalcenie* p){
         tabelaPrzeksztalcen.push_back(p);

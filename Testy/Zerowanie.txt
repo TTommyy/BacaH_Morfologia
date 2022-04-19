@@ -7,10 +7,13 @@ int main(){
     b(1,0,2) = b(1,1,1) = b(1,2,0) = 1;
 
     Zerowanie ze;
-
+    Inwersja i;
     ZlozeniePrzeksztalcen z;
     z.dodajPrzeksztalcenie(&ze);
-    std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
+    z.dodajPrzeksztalcenie(&i);
+    z.dodajPrzeksztalcenie(&ze);
+    z.dodajPrzeksztalcenie(&i);
+    std::cout << "Oryginalna bitmapa: \n"<< b << "\n\n";
     /*Powinno byc:
     {
         {
@@ -26,7 +29,7 @@ int main(){
     }
     */
     z.przeksztalc(b);
-    std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
+    std::cout << "Przeksztalcona bitmapa: \n"<< b << "\n\n";
     /*Pwonno byc
     {
         {

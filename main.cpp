@@ -1,46 +1,23 @@
 #include <iostream>
 #include "Morfologia.cpp"
 
-int main(){
-    BitmapaExt b(2,3,3);
-    b(0,0,0) = b(0,1,1)=b(0,2,2) = 1;
-    b(1,0,2) = b(1,1,1) = b(1,2,0) = 1;
+int main(){  
+  BitmapaExt b(3,4,5);
+  b(0,1,0)= b(0,2,2) = b(0,2,3) = b(0,1,2)= true;
+  b(1,2,1) = b(1,2,2) = b(1,2,3) = b(1,1,1) = b(2,1,2)= true;
+  b(2,2,1) = b(2,2,2) = b(2,2,3) = b(2,1,1) = true;
 
-    Zerowanie ze;
-    Inwersja i;
-    ZlozeniePrzeksztalcen z;
-    z.dodajPrzeksztalcenie(&ze);
-    z.dodajPrzeksztalcenie(&i);
-    z.dodajPrzeksztalcenie(&ze);
-    z.dodajPrzeksztalcenie(&i);
-    std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
-    /*Powinno byc:
-    {
-        {
-            {1,0,0},
-            {0,1,0},
-            {0,0,1}
-        },
-        {
-            {0,0,1},
-            {0,1,0},
-            {1,0,0}
-        }
-    }
-    */
-    z.przeksztalc(b);
-    std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
-    /*Pwonno byc
-    {
-        {
-            {0,0,0},
-            {0,0,0},
-            {0,0,0}
-        },
-        {
-            {0,0,0},
-            {0,0,0},
-            {0,0,0}
-        }
-    */
+  std::cout << "Oryginalna bitmapa:\n" <<  b << "\n\n";
+
+  Usrednianie u;
+  Dylatacja d;
+
+  ZlozeniePrzeksztalcen z;
+  z.dodajPrzeksztalcenie(&u);
+  z.dodajPrzeksztalcenie(&d);
+
+  // przeksztalcenie 'z' najpierw wykona usrednianie, a potem dylatacje
+  z.przeksztalc(b);
+
+  std::cout << "Przeksztalcona bitmapa:\n" << b << "\n";
 }
