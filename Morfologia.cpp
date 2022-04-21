@@ -364,9 +364,9 @@ public:
 
     /*Przkesztalcenie*/
     void przeksztalc(Bitmapa&bm) override{
-        BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());//kopijujemy bitampe
-        //Trojka* doZmiany = new Trojka[bm.sx()*bm.sy()*bm.sz()];
-        //unsigned long long iloscDoZmiany = 0;
+        //BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());//kopijujemy bitampe
+        Trojka* doZmiany = new Trojka[bm.sx()*bm.sy()*bm.sz()];
+        unsigned long long iloscDoZmiany = 0;
         Trojka sasiedzi[6];//przyda sie
         int iloscSasiadow,sX,sY,sZ;//^^^
         int bialy = 0,czarny = 0;
@@ -381,22 +381,27 @@ public:
                         //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
                         bm(sX,sY,sZ)? czarny++:bialy++;//podlicz
                     }
-                    if(bialy>3) copy(x,y,z) = 0;
-                    else if(czarny>3) copy(x,y,z) = 1;//ustaw odpowiednio
-                    else copy(x,y,z) = bm(x,y,z);
+                    if(bialy>3 && bm(x,y,z)==1) doZmiany[iloscDoZmiany++] = Trojka(x,y,z);
+                    else if(czarny>3 &&  bm(x,y,z)==0) doZmiany[iloscDoZmiany++] = Trojka(x,y,z);
+                    //else copy(x,y,z) = bm(x,y,z);
                 }
             }
         }
 
         /*Teraz przespszemy kopie do bitampy*/
         //bm = copy;
-        for(unsigned x = 0; x<rX; x++){//dla kazego punktu
+        /*for(unsigned x = 0; x<rX; x++){//dla kazego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z<rZ; z++){
                     bm(x,y,z) = copy(x,y,z);
                 }
             }
+        }*/
+         for(unsigned long long i =0; i<iloscDoZmiany; i++){//dla kazdego punktu do zmiany
+            //sX = doZmiany[i].x; sY = doZmiany[i].y; sZ = doZmiany[i].z;
+            bm(doZmiany[i].x,doZmiany[i].y,doZmiany[i].z) = !bm(doZmiany[i].x,doZmiany[i].y,doZmiany[i].z); //zmien kolor
         }
+        delete[] doZmiany;//zwalniamy pamiec
     }
 };
 
