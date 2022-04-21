@@ -67,7 +67,6 @@ public:
     unsigned x,y,z;
     Trojka(){};
     Trojka(unsigned x, unsigned y, unsigned z): x{x},y{y},z{z}{}
-    //Trojka operator =(Trojka t){ x = t.x; y = t.y; z = t.z; return *this; }
 };
 
 /** Klasa reprezentujaca bitmapy 3D.*/
@@ -90,8 +89,6 @@ public:
     * */
     BitmapaExt(unsigned x, unsigned y, unsigned z): rangeX{x},rangeY{y},rangeZ{z}{
         bitmap = new bool[x*y*z]; // Tworzy tablice bitow o rozmiarze x*y*z.
-        /*for(unsigned i = 0; i<x*y*z; ++i )
-            bitmap[i] = false;//Ustawiamy kolor kazdego na bialy*/
         memset(bitmap,0,x*y*z *(sizeof(bool)));// na bialy
     }
 
@@ -140,7 +137,9 @@ public:
 
 };
 
-/*Znajduje sasiadow bitu, ich liczbe przkazuje w parametrze*/
+/*Znajduje sasiadow bitu, ich liczbe przkazuje w parametrze
+* Bit jest sasiadem jeszeli styka sie sciana oraz nie wykarcza poza zakres
+*/
     void otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int& liczbaSasaidow,Trojka* otoczenie){
         liczbaSasaidow = 0;
         if(x>0){
@@ -168,21 +167,22 @@ public:
 
 /**Operator wyjscia dla klasy  BitMapa*/
 std::ostream &operator <<( std::ostream& ostream, const  Bitmapa& bitmapa) {
+    unsigned RX = bitmapa.sx(), RY = bitmapa.sy(), RZ = bitmapa.sz();
     ostream << "{\n";
-    for( unsigned rX = 0; rX < bitmapa.sx(); rX++ ){// wypisujemy dwuwymiarowe bloki
+    for( unsigned rX = 0; rX < RX; rX++ ){// wypisujemy dwuwymiarowe bloki
         ostream << " {\n";
-        for( unsigned rY = 0; rY < bitmapa.sy(); rY++ ){//wypsujemy wiersze w blokach
+        for( unsigned rY = 0; rY < RY; rY++ ){//wypsujemy wiersze w blokach
             ostream << "  {";
-            for(unsigned rZ = 0; rZ < bitmapa.sz(); rZ++ ){//wypisujemy wiersze
+            for(unsigned rZ = 0; rZ < RZ; rZ++ ){//wypisujemy wiersze
                 ostream << bitmapa(rX,rY,rZ);
-                if(rZ+1<bitmapa.sz()) ostream << ",";
+                if(rZ+1<RZ) ostream << ",";
             }
             ostream << "}";
-            if(rY+1<bitmapa.sy()) ostream << ",";
+            if(rY+1<RY) ostream << ",";
             ostream <<"\n";
         }
         ostream << " }";
-        if(rX+1<bitmapa.sx()) ostream << ",";
+        if(rX+1<RX) ostream << ",";
         ostream <<"\n";
     }
     ostream << "}";
@@ -194,8 +194,7 @@ std::ostream &operator <<( std::ostream& ostream, const  Bitmapa& bitmapa) {
 /**Zamiana pikseli czarnych na biale i viceversa*/
 class Inwersja:public Przeksztalcenie{
 public:
-    Inwersja(){};
-
+   
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
         unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
@@ -208,16 +207,16 @@ public:
         }
     }
 
-    //dekstruktor
-    ~Inwersja(){}
 };
 
-/**Przez piksel brzegowy obrazu rozumiemy piksel czarny, którego jednym z sąsiadów jest piksel biały. Operacja erozji polega na tym, że najpierw 
- * lokalizowane są wszystkie piksele brzegowe w danym obrazie, a następnie ich kolor jest ustawiany na biały.*/
+/**Przez piksel brzegowy obrazu rozumiemy piksel czarny, 
+ * którego jednym z sąsiadów jest piksel biały.
+ *  Operacja erozji polega na tym, że najpierw 
+ * lokalizowane są wszystkie piksele brzegowe w danym obrazie, 
+ * a następnie ich kolor jest ustawiany na biały.*/
 class Erozja:public Przeksztalcenie{
 public:
-    Erozja(){};
-
+    
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
        /*Znajdumemy punkty podantne na erozje*/
@@ -229,10 +228,11 @@ public:
         for(unsigned x=0; x<rX ;x++){//dla kazdego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z<rZ ; z++){
-                    if(bm(x,y,z)==1){//jesli czarny
+                    if(bm(x,y,z)){//jesli czarny
                         otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
                         for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)==0){//jesli jakis sasiad bialy
+                            if(!bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)){
+                            // jesli jakis sasiad bialy
                                 doErozji.push_back(Trojka(x,y,z));//to do erozji
                                 break;//idzemy dalej
                             }
@@ -251,7 +251,6 @@ public:
 /**Operacja odwrotna do erozji*/
 class Dylatacja:public Przeksztalcenie{
 public:
-    Dylatacja(){};
 
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
@@ -264,11 +263,10 @@ public:
         for(unsigned x=0; x<rX ;x++){//dla kazdego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z< rZ; z++){
-                    //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
-                    if(bm(x,y,z)==0){//jesli bialy
+                    if(!bm(x,y,z)){//jesli bialy
                         otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
                         for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z) == 1){//jesli jakis sasiad czarny
+                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)){//jesli jakis sasiad czarny
                                 doDylatacji.push_back(Trojka(x,y,z));//to do dylatacji
                                 break;//idzemy dalej
                             }
@@ -287,15 +285,13 @@ public:
 /**Ustawia wszytko na bialy*/
 class Zerowanie:public Przeksztalcenie{
 public:
-    Zerowanie(){};
-
     /*Przeksztalcenie*/
     void przeksztalc(Bitmapa& bm) override{
         unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
         for(unsigned x = 0; x<rX; x++)
             for(unsigned y = 0; y<rY; y++)
                 for(unsigned z = 0; z<rZ; z++)  
-                    bm(x,y,z) = 0;//zerujemy
+                    bm(x,y,z) = false;//zerujemy
     }
 };
 
@@ -307,8 +303,6 @@ public:
  * */
 class Usrednianie:public Przeksztalcenie{
 public:
-    Usrednianie(){};
-
     /*Przkesztalcenie*/
     void przeksztalc(Bitmapa&bm) override{
         unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
@@ -326,10 +320,10 @@ public:
                     for(int i=0;i <iloscSasiadow; i++){//dla kazdego sasiada
                         bm(sasiedzi[i].x,sasiedzi[i].y,sasiedzi[i].z)? czarny++:bialy++;//podlicz
                     }
-                    if(bialy>3 && bm(x,y,z)==1) {
+                    if(bialy>3 && bm(x,y,z)) {
                         doZmiany.push_back(Trojka(x,y,z));
                     } // jesli trzba przekaz odpowienim organa
-                    else if(czarny>3 &&  bm(x,y,z)==0) doZmiany.push_back(Trojka(x,y,z));
+                    else if(czarny>3 &&  !bm(x,y,z)) doZmiany.push_back(Trojka(x,y,z));
                 }
             }
         }

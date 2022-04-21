@@ -123,10 +123,11 @@ Przeksztalcona bitmapa:
 }
 
 void eroInf(){
-    BitmapaExt b(2,3,3);
-    b(0,0,0) = b(0,1,1)=b(0,2,2) = 1;
-    b(1,0,2) = b(1,1,1) = b(1,2,0) = 1;
-
+    BitmapaExt b(30,30,40);
+    for(int x = 0; x < b.sx(); x+=3)
+      for(int y = 1; y < b.sy(); y+=2)
+        for(int z = 2; z < b.sz(); z+=2)
+          b(x,y,z) = 1;
     Inwersja i;
     Erozja e;
 
@@ -183,10 +184,13 @@ using namespace std::chrono;
 
 int main(){  
   auto start = std::chrono::high_resolution_clock::now();
-  jawny();
-  dylInf();
-  eroInf();
+  int repeats = 100;
+  for(int i =0 ; i< repeats ;i++){
+    jawny();
+    dylInf();
+    eroInf();
+  }
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<microseconds>(stop - start);
-  std::cout << "Time: " <<duration.count() << std::endl;
+  std::cout << "Time: " <<duration.count()/repeats << std::endl;
 }
