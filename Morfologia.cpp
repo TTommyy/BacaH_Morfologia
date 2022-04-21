@@ -100,10 +100,10 @@ public:
         memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
     }
     BitmapaExt(const Bitmapa& bm){
-        rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sy();//nowy rozmiar
+        rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sz();//nowy rozmiar
         bitmap = new bool[rangeX*rangeY*rangeZ];
         for(unsigned x = 0; x < rangeX; x++)
-            for(unsigned y = 0; y<rangeY; y++)
+            for(unsigned y = 0; y < rangeY; y++)
                 for(unsigned z = 0; z < rangeZ; z++)
                     (*this)(x,y,z) = bm(x,y,z);
     }
@@ -112,7 +112,7 @@ public:
     BitmapaExt& operator=(const Bitmapa& bm){
         if(this!=&bm){
             delete[] bitmap;
-            rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sy();//nowy rozmiar
+            rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sz();//nowy rozmiar
             bitmap = new bool[rangeX*rangeY*rangeZ];
             for(unsigned x = 0; x < rangeX; x++)
                 for(unsigned y = 0; y<rangeY; y++)
@@ -339,7 +339,7 @@ public:
 /**Ustawia wszytko na bialy*/
 class Zerowanie:public Przeksztalcenie{
 public:
-    Zerowanie(){};
+    //Zerowanie(){};
 
     /*Przeksztalcenie*/
     void przeksztalc(Bitmapa& bm) override{
@@ -417,5 +417,5 @@ public:
     }
 };
 
-
+/*KONIEC*/
 #endif
