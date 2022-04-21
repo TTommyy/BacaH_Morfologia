@@ -90,8 +90,9 @@ public:
     * */
     BitmapaExt(unsigned x, unsigned y, unsigned z): rangeX{x},rangeY{y},rangeZ{z}{
         bitmap = new bool[x*y*z]; // Tworzy tablice bitow o rozmiarze x*y*z.
-        for(unsigned i = 0; i<x*y*z; ++i )
-            bitmap[i] = false;//Ustawiamy kolor kazdego na bialy
+        /*for(unsigned i = 0; i<x*y*z; ++i )
+            bitmap[i] = false;//Ustawiamy kolor kazdego na bialy*/
+        memset(bitmap,0,x*y*z *(sizeof(bool)));// na bialy
     }
 
     /**Konstruktory kopujacy*/
@@ -99,17 +100,17 @@ public:
         bitmap = new bool[rangeX*rangeY*rangeZ];
         memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
     }
-    BitmapaExt(const Bitmapa& bm){
+    /*BitmapaExt(const Bitmapa& bm){
         rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sz();//nowy rozmiar
         bitmap = new bool[rangeX*rangeY*rangeZ];
         for(unsigned x = 0; x < rangeX; x++)
             for(unsigned y = 0; y < rangeY; y++)
                 for(unsigned z = 0; z < rangeZ; z++)
                     (*this)(x,y,z) = bm(x,y,z);
-    }
+    }*/
 
     /**Operatory przypisania*/
-    BitmapaExt& operator=(const Bitmapa& bm){
+    /*BitmapaExt& operator=(const Bitmapa& bm){
         if(this!=&bm){
             delete[] bitmap;
             rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sz();//nowy rozmiar
@@ -120,7 +121,7 @@ public:
                         (*this)(x,y,z) = bm(x,y,z);
         }
         return *this;
-    }
+    }*/
 
     BitmapaExt& operator=(const BitmapaExt& bm){
     if(this!=&bm){
@@ -196,7 +197,7 @@ public:
 
 
 /**Operator wyjscia dla klasy  BitMapa*/
-std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
+std::ostream &operator <<( std::ostream& ostream, const  Bitmapa& bitmapa) {
     ostream << "{\n";
     for( unsigned rX = 0; rX < bitmapa.sx(); rX++ ){// wypisujemy dwuwymiarowe bloki
         ostream << " {\n";
@@ -219,11 +220,11 @@ std::ostream &operator <<( std::ostream& ostream, const  BitmapaExt& bitmapa) {
 }
 
 /*Kopiowanie bitampy*/
-BitmapaExt copy(const Bitmapa& bm){
+/*BitmapaExt copy(const Bitmapa& bm){
     BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());
     copy = bm;
     return copy;
-}
+}*/
 
 
 /*-----------------------Potomkowie klasy Przeksztalecnie-----------------*/
@@ -339,7 +340,7 @@ public:
 /**Ustawia wszytko na bialy*/
 class Zerowanie:public Przeksztalcenie{
 public:
-    //Zerowanie(){};
+    Zerowanie(){};
 
     /*Przeksztalcenie*/
     void przeksztalc(Bitmapa& bm) override{
@@ -364,6 +365,8 @@ public:
     /*Przkesztalcenie*/
     void przeksztalc(Bitmapa&bm) override{
         BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());//kopijujemy bitampe
+        //Trojka* doZmiany = new Trojka[bm.sx()*bm.sy()*bm.sz()];
+        //unsigned long long iloscDoZmiany = 0;
         Trojka sasiedzi[6];//przyda sie
         int iloscSasiadow,sX,sY,sZ;//^^^
         int bialy = 0,czarny = 0;
