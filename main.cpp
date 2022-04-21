@@ -188,5 +188,5 @@ int main(){
   eroInf();
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<microseconds>(stop - start);
-  std::cout << duration.count() << std::endl;
+  std::cout << "Time: " <<duration.count() << std::endl;
 }

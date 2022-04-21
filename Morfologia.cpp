@@ -100,29 +100,7 @@ public:
         bitmap = new bool[rangeX*rangeY*rangeZ];
         memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
     }
-    /*BitmapaExt(const Bitmapa& bm){
-        rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sz();//nowy rozmiar
-        bitmap = new bool[rangeX*rangeY*rangeZ];
-        for(unsigned x = 0; x < rangeX; x++)
-            for(unsigned y = 0; y < rangeY; y++)
-                for(unsigned z = 0; z < rangeZ; z++)
-                    (*this)(x,y,z) = bm(x,y,z);
-    }*/
-
-    /**Operatory przypisania*/
-    /*BitmapaExt& operator=(const Bitmapa& bm){
-        if(this!=&bm){
-            delete[] bitmap;
-            rangeX=bm.sx() ;rangeY=bm.sy();rangeZ=bm.sz();//nowy rozmiar
-            bitmap = new bool[rangeX*rangeY*rangeZ];
-            for(unsigned x = 0; x < rangeX; x++)
-                for(unsigned y = 0; y<rangeY; y++)
-                    for(unsigned z = 0; z < rangeZ; z++)
-                        (*this)(x,y,z) = bm(x,y,z);
-        }
-        return *this;
-    }*/
-
+    
     BitmapaExt& operator=(const BitmapaExt& bm){
     if(this!=&bm){
             delete[] bitmap;
@@ -165,33 +143,25 @@ public:
 /*Znajduje sasiadow bitu, ich liczbe przkazuje w parametrze*/
     void otoczenie(const Bitmapa& bm,unsigned x , unsigned y , unsigned z,int& liczbaSasaidow,Trojka* otoczenie){
         liczbaSasaidow = 0;
-        //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
         if(x>0){
             otoczenie[liczbaSasaidow++] = Trojka(x-1,y,z); 
-            //std::cout<< "SasiadAdd: " << "x: " << x-1 << " y: " << y << " z: " << z << "\n";
         }
-            
         if(x+1<bm.sx()) { 
             otoczenie[liczbaSasaidow++] = Trojka(x+1,y,z); 
-            //std::cout<< "SasiadAdd: " << "x: " << x+1 << " y: " << y << " z: " << z << "\n";
         }
+
         if(y>0){
             otoczenie[liczbaSasaidow++] = Trojka(x,y-1,z);
-            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y-1 << " z: " << z << "\n";
         } 
         if(y+1<bm.sy()) {
             otoczenie[liczbaSasaidow++] = Trojka(x,y+1,z);
-            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y+1 << " z: " << z << "\n";
         } 
         
         if(z>0) {
             otoczenie[liczbaSasaidow++] = Trojka(x,y,z-1);
-            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y << " z: " << z-1 << "\n";
         }
-
         if(z+1<bm.sz()){
             otoczenie[liczbaSasaidow++] = Trojka(x,y,z+1);
-            //std::cout<< "SasiadAdd: " << "x: " << x << " y: " << y << " z: " << z+1 << "\n";
         }
     } 
 
@@ -218,14 +188,6 @@ std::ostream &operator <<( std::ostream& ostream, const  Bitmapa& bitmapa) {
     ostream << "}";
     return ostream;
 }
-
-/*Kopiowanie bitampy*/
-/*BitmapaExt copy(const Bitmapa& bm){
-    BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());
-    copy = bm;
-    return copy;
-}*/
-
 
 /*-----------------------Potomkowie klasy Przeksztalecnie-----------------*/
 
@@ -259,23 +221,19 @@ public:
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
        /*Znajdumemy punkty podantne na erozje*/
-        Trojka* doErozji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
-        unsigned long long ilosDoErozji = 0;
+        unsigned rX = bm.sx(), rY = bm.sy() , rZ = bm.sz();
+        std::vector<Trojka> doErozji;
+        doErozji.reserve(rX*rY*rZ);
         Trojka sasiedzi[6];
         int liczbaSasiadow ;
-        int sX,sY,sZ;
-        for(unsigned x=0; x<bm.sx() ;x++){//dla kazdego punktu
-            for(unsigned y=0; y<bm.sy(); y++){
-                for(unsigned z=0; z<bm.sz(); z++){
-                    //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
+        for(unsigned x=0; x<rX ;x++){//dla kazdego punktu
+            for(unsigned y=0; y<rY; y++){
+                for(unsigned z=0; z<rZ ; z++){
                     if(bm(x,y,z)==1){//jesli czarny
                         otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
                         for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            //sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
-                            //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
-                            //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
                             if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)==0){//jesli jakis sasiad bialy
-                                doErozji[ilosDoErozji++] = Trojka(x,y,z);//to do erozji
+                                doErozji.push_back(Trojka(x,y,z));//to do erozji
                                 break;//idzemy dalej
                             }
                         }
@@ -283,13 +241,9 @@ public:
                 }
             }
         }
-        for(unsigned long long i =0; i<ilosDoErozji; i++){//dla kazdego punktu do erozji
-
-            //sX = doErozji[i].x; sY = doErozji[i].y; sZ = doErozji[i].z;
-            //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-            bm(doErozji[i].x,doErozji[i].y,doErozji[i].z) = false;//zmien kolor na bialy
+        for(auto i : doErozji){//dla kazdego punktu do zmiany
+            bm(i.x,i.y,i.z) = false; //zmien kolor
         }
-        delete[] doErozji;//zwalniamy pamiec
 
     }
 };
@@ -302,23 +256,20 @@ public:
     //funkcja przeksztalcajaca
     void przeksztalc(Bitmapa& bm) override{
        /*Znajdumemy punkty podantne na erozje*/
-        Trojka* doDylatacji = new Trojka[bm.sx()*bm.sy()*bm.sz()];
-        unsigned long long ilosDoDylatacji = 0;
+        unsigned rX = bm.sx(), rY = bm.sy() , rZ = bm.sz();
+        std::vector<Trojka> doDylatacji;
+        doDylatacji.reserve(rX*rY*rZ);
         Trojka sasiedzi[6];
         int liczbaSasiadow ;
-        int sX,sY,sZ;
-        for(unsigned x=0; x<bm.sx() ;x++){//dla kazdego punktu
-            for(unsigned y=0; y<bm.sy(); y++){
-                for(unsigned z=0; z<bm.sz(); z++){
+        for(unsigned x=0; x<rX ;x++){//dla kazdego punktu
+            for(unsigned y=0; y<rY; y++){
+                for(unsigned z=0; z< rZ; z++){
                     //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
                     if(bm(x,y,z)==0){//jesli bialy
                         otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
                         for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            //sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
-                            //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
-                            //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
                             if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z) == 1){//jesli jakis sasiad czarny
-                                doDylatacji[ilosDoDylatacji++] = Trojka(x,y,z);//to do dylatacji
+                                doDylatacji.push_back(Trojka(x,y,z));//to do dylatacji
                                 break;//idzemy dalej
                             }
                         }
@@ -326,13 +277,9 @@ public:
                 }
             }
         }
-        for(unsigned long long i =0; i<ilosDoDylatacji; i++){//dla kazdego punktu do dylatacji
-
-            //sX = doDylatacji[i].x; sY = doDylatacji[i].y; sZ = doDylatacji[i].z;
-            //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-            bm(doDylatacji[i].x,doDylatacji[i].y,doDylatacji[i].z) = true;//zmien kolor na czarny
+        for(auto i : doDylatacji){//dla kazdego punktu do zmiany
+            bm(i.x,i.y,i.z) = true; //zmien kolor
         }
-        delete[] doDylatacji;//zwalniamy pamiec
 
     }
 };
@@ -364,46 +311,34 @@ public:
 
     /*Przkesztalcenie*/
     void przeksztalc(Bitmapa&bm) override{
-        //BitmapaExt copy(bm.sx(),bm.sy(),bm.sz());//kopijujemy bitampe
-        Trojka* doZmiany = new Trojka[bm.sx()*bm.sy()*bm.sz()];
-        unsigned long long iloscDoZmiany = 0;
-        Trojka sasiedzi[6];//przyda sie
-        int iloscSasiadow,sX,sY,sZ;//^^^
-        int bialy = 0,czarny = 0;
         unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
+        std::vector<Trojka> doZmiany;
+        doZmiany.reserve(rX*rY*rZ);
+        Trojka sasiedzi[6];//przyda sie
+        int iloscSasiadow;//sX,sY,sZ;//^^^
+        int bialy,czarny;
+       
         for(unsigned x = 0; x<rX; x++){//dla kazego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z<rZ; z++){
                     otoczenie(bm,x,y,z,iloscSasiadow,sasiedzi);//znajdz sasiadow
                     bialy = czarny = 0;//wyzeruj licznki
                     for(int i=0;i <iloscSasiadow; i++){//dla kazdego sasiada
-                        sX = sasiedzi[i].x; sY = sasiedzi[i].y; sZ = sasiedzi[i].z;
-                        //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
                         bm(sasiedzi[i].x,sasiedzi[i].y,sasiedzi[i].z)? czarny++:bialy++;//podlicz
                     }
-                    if(bialy>3 && bm(x,y,z)==1) doZmiany[iloscDoZmiany++] = Trojka(x,y,z);
-                    else if(czarny>3 &&  bm(x,y,z)==0) doZmiany[iloscDoZmiany++] = Trojka(x,y,z);
-                    //else copy(x,y,z) = bm(x,y,z);
+                    if(bialy>3 && bm(x,y,z)==1) {
+                        doZmiany.push_back(Trojka(x,y,z));
+                    } // jesli trzba przekaz odpowienim organa
+                    else if(czarny>3 &&  bm(x,y,z)==0) doZmiany.push_back(Trojka(x,y,z));
                 }
             }
         }
-
-        /*Teraz przespszemy kopie do bitampy*/
-        //bm = copy;
-        /*for(unsigned x = 0; x<rX; x++){//dla kazego punktu
-            for(unsigned y=0; y<rY; y++){
-                for(unsigned z=0; z<rZ; z++){
-                    bm(x,y,z) = copy(x,y,z);
-                }
-            }
-        }*/
-         for(unsigned long long i =0; i<iloscDoZmiany; i++){//dla kazdego punktu do zmiany
-            //sX = doZmiany[i].x; sY = doZmiany[i].y; sZ = doZmiany[i].z;
-            bm(doZmiany[i].x,doZmiany[i].y,doZmiany[i].z) = !bm(doZmiany[i].x,doZmiany[i].y,doZmiany[i].z); //zmien kolor
+        for(auto i : doZmiany){//dla kazdego punktu do zmiany
+            bm(i.x,i.y,i.z) = !bm(i.x,i.y,i.z); //zmien kolor
         }
-        delete[] doZmiany;//zwalniamy pamiec
     }
 };
+
 
 /*Klasa skladajaca przeksztalcenie*/
 class ZlozeniePrzeksztalcen:public Przeksztalcenie{
@@ -421,7 +356,6 @@ public:
         for(auto p:tabelaPrzeksztalcen)
             p->przeksztalc(bm);
         
-        //tabelaPrzeksztalcen.clear();
     }
 };
 
