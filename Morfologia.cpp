@@ -271,10 +271,10 @@ public:
                     if(bm(x,y,z)==1){//jesli czarny
                         otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
                         for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
+                            //sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
                             //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
                             //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-                            if(bm(sX,sY,sZ)==0){//jesli jakis sasiad bialy
+                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)==0){//jesli jakis sasiad bialy
                                 doErozji[ilosDoErozji++] = Trojka(x,y,z);//to do erozji
                                 break;//idzemy dalej
                             }
@@ -285,9 +285,9 @@ public:
         }
         for(unsigned long long i =0; i<ilosDoErozji; i++){//dla kazdego punktu do erozji
 
-            sX = doErozji[i].x; sY = doErozji[i].y; sZ = doErozji[i].z;
+            //sX = doErozji[i].x; sY = doErozji[i].y; sZ = doErozji[i].z;
             //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-            bm(sX,sY,sZ) = false;//zmien kolor na bialy
+            bm(doErozji[i].x,doErozji[i].y,doErozji[i].z) = false;//zmien kolor na bialy
         }
         delete[] doErozji;//zwalniamy pamiec
 
@@ -314,10 +314,10 @@ public:
                     if(bm(x,y,z)==0){//jesli bialy
                         otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
                         for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
+                            //sX = sasiedzi[sasiad].x; sY = sasiedzi[sasiad].y; sZ = sasiedzi[sasiad].z;
                             //std::cout<< "Punkt" << "x: " << x << " y: " << y << " z: " << z << "\n";
                             //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-                            if(bm(sX,sY,sZ)==1){//jesli jakis sasiad czarny
+                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z) == 1){//jesli jakis sasiad czarny
                                 doDylatacji[ilosDoDylatacji++] = Trojka(x,y,z);//to do dylatacji
                                 break;//idzemy dalej
                             }
@@ -328,9 +328,9 @@ public:
         }
         for(unsigned long long i =0; i<ilosDoDylatacji; i++){//dla kazdego punktu do dylatacji
 
-            sX = doDylatacji[i].x; sY = doDylatacji[i].y; sZ = doDylatacji[i].z;
+            //sX = doDylatacji[i].x; sY = doDylatacji[i].y; sZ = doDylatacji[i].z;
             //std::cout<< "Erozja x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-            bm(sX,sY,sZ) = true;//zmien kolor na czarny
+            bm(doDylatacji[i].x,doDylatacji[i].y,doDylatacji[i].z) = true;//zmien kolor na czarny
         }
         delete[] doDylatacji;//zwalniamy pamiec
 
@@ -379,7 +379,7 @@ public:
                     for(int i=0;i <iloscSasiadow; i++){//dla kazdego sasiada
                         sX = sasiedzi[i].x; sY = sasiedzi[i].y; sZ = sasiedzi[i].z;
                         //std::cout<< "Sasiad" << "x: " << sX << " y: " << sY << " z: " << sZ << "\n";
-                        bm(sX,sY,sZ)? czarny++:bialy++;//podlicz
+                        bm(sasiedzi[i].x,sasiedzi[i].y,sasiedzi[i].z)? czarny++:bialy++;//podlicz
                     }
                     if(bialy>3 && bm(x,y,z)==1) doZmiany[iloscDoZmiany++] = Trojka(x,y,z);
                     else if(czarny>3 &&  bm(x,y,z)==0) doZmiany[iloscDoZmiany++] = Trojka(x,y,z);
