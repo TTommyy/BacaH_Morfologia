@@ -217,7 +217,7 @@ public:
 class Erozja:public Przeksztalcenie{
 public:
     
-    //funkcja przeksztalcajaca
+    /**Funkcja Przeksztalcajaca*/
     void przeksztalc(Bitmapa& bm) override{
        /*Znajdumemy punkty podantne na erozje*/
         unsigned rX = bm.sx(), rY = bm.sy() , rZ = bm.sz();
@@ -225,24 +225,24 @@ public:
         doErozji.reserve(rX*rY*rZ);
         Trojka sasiedzi[6];
         int liczbaSasiadow ;
-        for(unsigned x=0; x<rX ;x++){//dla kazdego punktu
+        for(unsigned x=0; x<rX ;x++){//Dla kazdego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z<rZ ; z++){
-                    if(bm(x,y,z)){//jesli czarny
-                        otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
-                        for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
+                    if(bm(x,y,z)){//Jesli jest czarny
+                        otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//Znajedumy sasiadow
+                        for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//Dla kazdego sasiada
                             if(!bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)){
-                            // jesli jakis sasiad bialy
-                                doErozji.push_back(Trojka(x,y,z));//to do erozji
-                                break;//idzemy dalej
+                            // Jesli jakis jest bialy
+                                doErozji.push_back(Trojka(x,y,z));//To do erozji
+                                break;//Idzemy dalej
                             }
                         }
                     }
                 }
             }
         }
-        for(auto i : doErozji){//dla kazdego punktu do zmiany
-            bm(i.x,i.y,i.z) = false; //zmien kolor
+        for(auto i : doErozji){//Dla kazdego punktu podatnego na erozje
+            bm(i.x,i.y,i.z) = false; //Zmieniamy kolor na bialy
         }
 
     }
@@ -252,7 +252,7 @@ public:
 class Dylatacja:public Przeksztalcenie{
 public:
 
-    //funkcja przeksztalcajaca
+   /**Funkcja Przeksztalcajaca*/
     void przeksztalc(Bitmapa& bm) override{
        /*Znajdumemy punkty podantne na erozje*/
         unsigned rX = bm.sx(), rY = bm.sy() , rZ = bm.sz();
@@ -260,23 +260,24 @@ public:
         doDylatacji.reserve(rX*rY*rZ);
         Trojka sasiedzi[6];
         int liczbaSasiadow ;
-        for(unsigned x=0; x<rX ;x++){//dla kazdego punktu
+        for(unsigned x=0; x<rX ;x++){//Dla kazdego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z< rZ; z++){
-                    if(!bm(x,y,z)){//jesli bialy
-                        otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//znajedumy sasiadow
-                        for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//dla kazdego sasiada
-                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)){//jesli jakis sasiad czarny
-                                doDylatacji.push_back(Trojka(x,y,z));//to do dylatacji
-                                break;//idzemy dalej
+                    if(!bm(x,y,z)){//Jesli jest bialy
+                        otoczenie(bm,x,y,z,liczbaSasiadow,sasiedzi);//Znajedumy sasiadow
+                        for(int sasiad = 0; sasiad < liczbaSasiadow; sasiad++){//Dla kazdego sasiada
+                            if(bm(sasiedzi[sasiad].x,sasiedzi[sasiad].y,sasiedzi[sasiad].z)){
+                                //Jesli jakis jest czarny
+                                doDylatacji.push_back(Trojka(x,y,z));//To do dylatacji
+                                break;//Idzemy dalej
                             }
                         }
                     }
                 }
             }
         }
-        for(auto i : doDylatacji){//dla kazdego punktu do zmiany
-            bm(i.x,i.y,i.z) = true; //zmien kolor
+        for(auto i : doDylatacji){//Dla kazdego punktu do zmiany
+            bm(i.x,i.y,i.z) = true; //Zmien kolor na czarny
         }
 
     }
@@ -285,13 +286,13 @@ public:
 /**Ustawia wszytko na bialy*/
 class Zerowanie:public Przeksztalcenie{
 public:
-    /*Przeksztalcenie*/
+    /**Funkcja Przeksztalcajaca*/
     void przeksztalc(Bitmapa& bm) override{
         unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
         for(unsigned x = 0; x<rX; x++)
             for(unsigned y = 0; y<rY; y++)
                 for(unsigned z = 0; z<rZ; z++)  
-                    bm(x,y,z) = false;//zerujemy
+                    bm(x,y,z) = false;//Zmieniemy kolor na bialy
     }
 };
 
@@ -303,32 +304,31 @@ public:
  * */
 class Usrednianie:public Przeksztalcenie{
 public:
-    /*Przkesztalcenie*/
+    /**Funkcja Przeksztalcajaca*/
     void przeksztalc(Bitmapa&bm) override{
         unsigned rX = bm.sx(), rY = bm.sy(), rZ = bm.sz();
         std::vector<Trojka> doZmiany;
         doZmiany.reserve(rX*rY*rZ);
-        Trojka sasiedzi[6];//przyda sie
-        int iloscSasiadow;//sX,sY,sZ;//^^^
-        int bialy,czarny;
+        Trojka sasiedzi[6];
+        int iloscSasiadow,bialy,czarny;
        
-        for(unsigned x = 0; x<rX; x++){//dla kazego punktu
+        for(unsigned x = 0; x<rX; x++){//Dla kazego punktu
             for(unsigned y=0; y<rY; y++){
                 for(unsigned z=0; z<rZ; z++){
-                    otoczenie(bm,x,y,z,iloscSasiadow,sasiedzi);//znajdz sasiadow
-                    bialy = czarny = 0;//wyzeruj licznki
-                    for(int i=0;i <iloscSasiadow; i++){//dla kazdego sasiada
-                        bm(sasiedzi[i].x,sasiedzi[i].y,sasiedzi[i].z)? czarny++:bialy++;//podlicz
+                    otoczenie(bm,x,y,z,iloscSasiadow,sasiedzi);//Znajdz sasiadow
+                    bialy = czarny = 0;//Wyzeruj licznki
+                    for(int i=0;i <iloscSasiadow; i++){//Policz kazdego sasiada
+                        bm(sasiedzi[i].x,sasiedzi[i].y,sasiedzi[i].z)? czarny++:bialy++;
                     }
                     if(bialy>3 && bm(x,y,z)) {
                         doZmiany.push_back(Trojka(x,y,z));
-                    } // jesli trzba przekaz odpowienim organa
+                    } // Jesli zachodzi taka potrzeba przekaz go do zmiany koloru
                     else if(czarny>3 &&  !bm(x,y,z)) doZmiany.push_back(Trojka(x,y,z));
                 }
             }
         }
-        for(auto i : doZmiany){//dla kazdego punktu do zmiany
-            bm(i.x,i.y,i.z) = !bm(i.x,i.y,i.z); //zmien kolor
+        for(auto i : doZmiany){//Dla kazdego punktu do zmiany
+            bm(i.x,i.y,i.z) = !bm(i.x,i.y,i.z); //Zmien kolor na przeciwny
         }
     }
 };
