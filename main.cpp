@@ -11,7 +11,7 @@ void dylInf(){
     ZlozeniePrzeksztalcen z;
     z.dodajPrzeksztalcenie(&d);
     z.dodajPrzeksztalcenie(&i);
-    std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
+    //std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
     /*Powinno byc:
     {
         {
@@ -27,7 +27,7 @@ void dylInf(){
     }
     */
     z.przeksztalc(b);
-    std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
+    //std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
    
    /*
     Po dylatacji:
@@ -65,7 +65,7 @@ void jawny(){
   b(1,2,1) = b(1,2,2) = b(1,2,3) = b(1,1,1) = b(2,1,2)= true;
   b(2,2,1) = b(2,2,2) = b(2,2,3) = b(2,1,1) = true;
 
-  std::cout << "Oryginalna bitmapa:\n" <<  b << "\n\n";
+  //std::cout << "Oryginalna bitmapa:\n" <<  b << "\n\n";
 
   Usrednianie u;
   Dylatacja d;
@@ -77,7 +77,7 @@ void jawny(){
   // przeksztalcenie 'z' najpierw wykona usrednianie, a potem dylatacje
   z.przeksztalc(b);
 
-  std::cout << "Przeksztalcona bitmapa:\n" << b << "\n";
+  //std::cout << "Przeksztalcona bitmapa:\n" << b << "\n";
 /*{
  {
   {0,0,0,0,0},
@@ -134,7 +134,7 @@ void eroInf(){
     ZlozeniePrzeksztalcen z;
     z.dodajPrzeksztalcenie(&e);
     z.dodajPrzeksztalcenie(&i);
-    std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
+    //std::cout << "Oryginalna bitmapa: "<< b << "\n\n";
     /*Powinno byc:
     {
         {
@@ -150,7 +150,7 @@ void eroInf(){
     }
     */
     z.przeksztalc(b);
-    std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
+    //std::cout << "Przeksztalcona bitmapa: "<< b << "\n\n";
     /*Najpierw erozja a wiec:
     {
         {

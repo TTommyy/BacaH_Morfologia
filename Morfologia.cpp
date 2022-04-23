@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <cstdlib>
 
 /*Test jawny zwraca:
 Oryginalna bitmapa:
@@ -88,21 +89,21 @@ public:
     * Tworzy biala bitmape.
     * */
     BitmapaExt(unsigned x, unsigned y, unsigned z): rangeX{x},rangeY{y},rangeZ{z}{
-        bitmap = new bool[x*y*z]; // Tworzy tablice bitow o rozmiarze x*y*z.
-        memset(bitmap,0,x*y*z *(sizeof(bool)));// na bialy
+        /*bitmap = new bool[x*y*z]; // Tworzy tablice bitow o rozmiarze x*y*z.
+        memset(bitmap,0,x*y*z *(sizeof(bool)));// na bialy*/
+        bitmap = (bool*)calloc(x*y*z, sizeof(bool));
     }
 
     /**Konstruktory kopujacy*/
     BitmapaExt(const BitmapaExt& bm):rangeX{bm.rangeX} ,rangeY{bm.rangeY},rangeZ{bm.rangeZ}{
-        bitmap = new bool[rangeX*rangeY*rangeZ];
+        bitmap = (bool*) malloc(rangeX*rangeY*rangeZ*sizeof(bool));
         memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));
     }
     
     BitmapaExt& operator=(const BitmapaExt& bm){
     if(this!=&bm){
-            delete[] bitmap;
             rangeX=bm.rangeX ;rangeY=bm.rangeY;rangeZ=bm.rangeZ;//nowy rozmiar
-            bitmap = new bool[rangeX*rangeY*rangeZ];
+            bitmap = (bool*) realloc(bitmap,rangeX*rangeY*rangeZ*sizeof(bool));
             memcpy(bitmap,bm.bitmap,sizeof(bool)*(rangeX*rangeY*rangeZ));//kopijujemy
         }
         return *this;
@@ -334,7 +335,7 @@ public:
 };
 
 
-/*Klasa skladajaca przeksztalcenie*/
+/*Klasa skladajaca przeksztalcenia*/
 class ZlozeniePrzeksztalcen:public Przeksztalcenie{
 
 std::vector<Przeksztalcenie*> tabelaPrzeksztalcen;
